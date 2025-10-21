@@ -18,7 +18,7 @@ except Exception:
     FEATURE_NAMES = None  # Fallback if not available (rare)
 
 # -----------------------------
-# Inverse-transform constants (from your notebook, AFTER Cell 53)
+# Inverse-transform constants
 # Standardized cube-root(selling_price)  ->  cube-root  ->  original price
 # -----------------------------
 MU = 79.56940902399067
@@ -32,7 +32,7 @@ st.set_page_config(page_title="Car Price Prediction", layout="centered")
 st.title("🚗 Car Price Prediction App")
 st.write("Enter car details to estimate its selling price (number only, no currency).")
 
-# Categorical choices (use the same labels you trained on)
+# Categorical choices
 brand = st.selectbox(
     "Select Car Brand",
     [
@@ -55,7 +55,7 @@ fuel_type = st.selectbox("Fuel Type", ["Petrol", "Diesel", "CNG", "LPG"])
 transmission_type = st.selectbox("Transmission", ["Manual", "Automatic"])
 
 # -----------------------------
-# Build model input row aligned to training features
+# Building a model input row which will align to training features
 # -----------------------------
 def build_feature_row():
     """
@@ -64,7 +64,6 @@ def build_feature_row():
     Numeric columns are set directly from inputs.
     """
     if FEATURE_NAMES is None:
-        # Minimal fallback: try with a reasonable guess
         base_cols = [
             "vehicle_age", "km_driven", "mileage", "engine", "max_power", "seats",
             f"fuel_type_{fuel_type}", f"transmission_type_{transmission_type}",
@@ -82,7 +81,7 @@ def build_feature_row():
         data[f"brand_{brand}"] = 1
         return pd.DataFrame([data])
 
-    # If we have the exact feature list, create a zero vector and fill appropriately
+    # If we have the exact feature list, we can create a zero vector and fill appropriately
     row = pd.Series(0.0, index=FEATURE_NAMES, dtype=float)
 
     # Set numeric features if they exist in the model's feature set
